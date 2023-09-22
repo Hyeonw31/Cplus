@@ -110,10 +110,11 @@ int main()
 	//문제 아래 time 들었는 초 값에 분과 시간을 구해라
 	unsigned int sec = 987654321;
 
-	unsigned int hour = 0,min = 0, sec = 0;
-	hour = 0;
-	min = 0;
-	sec = 0;
+	unsigned int day = 0, hour = 0,min = 0, sec1 = 0;
+	day = (sec / 86400);
+	hour = (sec % 86400)/3600 ;
+	min = ((sec % 86400) % 3600) / 60;
+	sec1 = ((sec % 86400) % 3600) % 60;
 
 
 
