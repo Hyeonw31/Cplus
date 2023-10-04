@@ -73,7 +73,9 @@ public:
 
 	void SetC(int num)
 	{
-		c = num;
+		// this : 클래스 안에서 함수가 호출한 객체를 의미함
+		// 일반적으로 this 키워드는 생략함
+		this->c = num;
 	}
 
 	// 연산자 오버로딩(Operator Overloading)
