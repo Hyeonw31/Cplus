@@ -27,7 +27,7 @@ int main()
 	}
 	//(0~100) 2에 배수의 갯수 출력
 	int Count = 0;
-	for (int i = 1; i <= 90; i++) {
+	for (int i = 1; i <= 100; i++) {
 		if (i % 2 == 0)
 		{
 			Count++;
@@ -37,12 +37,33 @@ int main()
 
 	//abcdef를 역으로 출력하기 -> fedcba
 	wchar_t szWChar[20] = L"abcdef";
-	wcscpy_s(szWChar, L"fedcba");
-	wprintf(L"szWChar=%s\n", szWChar);
+	int size = wcslen(szWChar);
+	printf("%c", szWChar[size - 1]);
+	printf("%c", szWChar[size - 2]);
+	printf("%c", szWChar[size - 3]);
+	printf("%c", szWChar[size - 4]);
+	printf("%c", szWChar[size - 5]);
+	printf("%c", szWChar[size - 6]); 
+	//-> for (int i = 1; i<=size; ++i)
+	// { printf("%c", szWChar[size - i]); }
+	//-> for(int i = size; i>=0; --i)
+	// { printf("%c", szWChar[i - 1]); }
+
+	/*wcscpy_s(szWChar, L"fedcba");
+	wprintf(L"szWChar=%s\n", szWChar);*/
 
 	//wchar_t 형으로 문자 입력 받기
+	// "szWCharInput"이름을 가진
+	// "wchar_t"변수형을 [20]의 크기로 생성하고 L""값을 초기값으로 넣는다.
 	wchar_t szWCharInput[100] = L"";
+	// wscanf_S는 입력을 받는 기능을 사용 
+	// L"%ls" 변수형태로 입력을 받는다.
+	// "szWCharInput"변수에 입력한 값을 넣어주겠다.
+	// *(unsigned)_countof(szWCharInput)"은 값을 넣을 변수의 크기.
 	wscanf_s(L"%ls", szWCharInput, (unsigned)_countof(szWCharInput));
+	// wprintf는 출력을 하는 기능 
+	// L"szWCharInput=%s" 문자 형태로 출력.
+	// %s위치에 szWCharInput 값을 출력.
 	wprintf(L"szWCharInput=%s\n", szWCharInput);
 	
 	// 입력 받은 문자열에서 'a'문자 갯수 출력
