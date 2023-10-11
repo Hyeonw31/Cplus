@@ -54,7 +54,7 @@ int main()
 			{
 				printf("%f : 정상\n", GetBMI(weight, standardWeight(height)));
 			}
-			else if (10 < GetBMI(weight, standardWeight(height)), GetBMI(weight, standardWeight(height))<= 20)
+			else if (10 < GetBMI(weight, standardWeight(height)) && GetBMI(weight, standardWeight(height))<= 20)
 			{
 				printf("%f : 과체중\n", GetBMI(weight, standardWeight(height)));
 			}
