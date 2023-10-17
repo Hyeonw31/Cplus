@@ -2,26 +2,28 @@
 
 #pragma once
 
-#include "CoreMinimal.h" // 컴파일 속도를 빠르게 하기위해 기본적인 최소한에 라이브러리만 포함한 해더
+#include "CoreMinimal.h"
 #include "Public/Tools/InterfacePlayObj.h"
-#include "GameFramework/Actor.h" // AActor 클래스 해더 파일
+#include "GameFramework/Actor.h"
+#include "MoveRect.generated.h"
 
-// generated.h 언리얼 클래스 생성 처리하는 해더☆ 
-// 1) 모든 언리얼 클래스가 생성되려면 아래 코드를 넣어주어야 한다.
-// 2) 반드시 모든 #include 중 마지막에 배치한다
-// --> 기본공식
-#include "MoveLeftRight.generated.h"
-
-// UNREALCODE_API : 이 클래스는 UNREALCODE_API 모듈에 포함된다.
-UCLASS() // 언리얼 클래스 선언 ( UCLASS )
-class UNREALCODE_API AMoveLeftRight : public AActor, public IInterfacePlayObj // public AActor : AActor의 기능을 상속받겠다.
+UENUM(BlueprintType) // 언리얼 ENUM을 블루프린트에서도 사용가능하도록 선언
+enum class EN_MoveTypeCode : uint8
 {
-	GENERATED_BODY() // 언리얼 코드 생성 함수 - 언리얼 클래스 생성 기본 규칙
+	MoveRight UMETA(DisplayName = "Right"), // MoveRight(C++에서 사용하는 이름), UMETA 옵션 중 'DisplayName = "Right"'은 블루프린트에서 보여질 이름
+	MoveUp UMETA(DisplayName = "Up"),
+	MoveLeft UMETA(DisplayName = "Left"),
+	MoveDown UMETA(DisplayName = "Down")
+};
+
+UCLASS()
+class UNREALCODE_API AMoveRect : public AActor, public IInterfacePlayObj
+{
+	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AMoveLeftRight();
-	~AMoveLeftRight();
+	AMoveRect();
 
 protected:
 	// Called when the game starts or when spawned
@@ -34,7 +36,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-
 public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void Code_DoPlay(bool IsPlay); // 블루프린트 호출용 함수명 선언 
@@ -42,15 +43,15 @@ public:
 	virtual void Code_DoPlay_Implementation(bool IsPlay) override; // C++에서 실행될 함수
 
 public:
-
 	UPROPERTY(EditAnyWhere, BlueprintReadOnly)
 	USceneComponent* Scene;
 
 	UPROPERTY(VisibleAnyWhere, BlueprintReadWrite)
 	UStaticMeshComponent* StaticMesh;
 
+	EN_MoveTypeCode m_MoveType;
 	float m_LocX;
-	bool m_IsMoveRight;
+	float m_LocZ;
 	bool m_IsPlay;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
