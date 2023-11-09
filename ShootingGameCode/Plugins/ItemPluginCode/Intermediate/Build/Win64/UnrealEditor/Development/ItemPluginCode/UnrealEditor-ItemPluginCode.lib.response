@@ -1,0 +1,12 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UnrealEditor-ItemPluginCode.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"D:\Works\Cplus\ShootingGameCode\Intermediate\Build\Win64\ShootingGameCodeEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.h.obj"
+"D:\Works\Cplus\ShootingGameCode\Plugins\ItemPluginCode\Intermediate\Build\Win64\UnrealEditor\Development\ItemPluginCode\Module.ItemPluginCode.cpp.obj"
+"D:\Works\Cplus\ShootingGameCode\Plugins\ItemPluginCode\Intermediate\Build\Win64\UnrealEditor\Development\ItemPluginCode\Default.rc2.res"
+/OUT:"D:\Works\Cplus\ShootingGameCode\Plugins\ItemPluginCode\Intermediate\Build\Win64\UnrealEditor\Development\ItemPluginCode\UnrealEditor-ItemPluginCode.lib"

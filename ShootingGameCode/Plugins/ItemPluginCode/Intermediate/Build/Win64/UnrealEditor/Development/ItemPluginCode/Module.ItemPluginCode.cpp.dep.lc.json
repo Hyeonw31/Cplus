@@ -1,0 +1,24 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "d:\\works\\cplus\\shootinggamecode\\plugins\\itemplugincode\\intermediate\\build\\win64\\unrealeditor\\development\\itemplugincode\\module.itemplugincode.cpp",
+        "ProvidedModule": "",
+        "PCH": "d:\\works\\cplus\\shootinggamecode\\intermediate\\build\\win64\\shootinggamecodeeditor\\development\\engine\\sharedpch.engine.shadowerrors.h.pch",
+        "Includes": [
+            "d:\\works\\cplus\\shootinggamecode\\plugins\\itemplugincode\\intermediate\\build\\win64\\unrealeditor\\development\\itemplugincode\\definitions.itemplugincode.h",
+            "d:\\works\\cplus\\shootinggamecode\\plugins\\itemplugincode\\intermediate\\build\\win64\\unrealeditor\\inc\\itemplugincode\\uht\\iteminteraction.gen.cpp",
+            "d:\\works\\cplus\\shootinggamecode\\plugins\\itemplugincode\\source\\itemplugincode\\public\\iteminteraction.h",
+            "d:\\works\\cplus\\shootinggamecode\\plugins\\itemplugincode\\intermediate\\build\\win64\\unrealeditor\\inc\\itemplugincode\\uht\\iteminteraction.generated.h",
+            "d:\\works\\cplus\\shootinggamecode\\plugins\\itemplugincode\\intermediate\\build\\win64\\unrealeditor\\inc\\itemplugincode\\uht\\itemmag.gen.cpp",
+            "d:\\works\\cplus\\shootinggamecode\\plugins\\itemplugincode\\source\\itemplugincode\\public\\itemmag.h",
+            "d:\\works\\cplus\\shootinggamecode\\plugins\\itemplugincode\\intermediate\\build\\win64\\unrealeditor\\inc\\itemplugincode\\uht\\itemmag.generated.h",
+            "d:\\works\\cplus\\shootinggamecode\\plugins\\itemplugincode\\intermediate\\build\\win64\\unrealeditor\\inc\\itemplugincode\\uht\\itemplugincode.init.gen.cpp",
+            "d:\\works\\cplus\\shootinggamecode\\plugins\\itemplugincode\\source\\itemplugincode\\private\\iteminteraction.cpp",
+            "d:\\works\\cplus\\shootinggamecode\\plugins\\itemplugincode\\source\\itemplugincode\\private\\itemmag.cpp",
+            "d:\\works\\cplus\\shootinggamecode\\plugins\\itemplugincode\\source\\itemplugincode\\private\\itemplugincode.cpp",
+            "d:\\works\\cplus\\shootinggamecode\\plugins\\itemplugincode\\source\\itemplugincode\\public\\itemplugincode.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}
