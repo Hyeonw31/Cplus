@@ -28,9 +28,9 @@ public:
 
 public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void EventTrigger();
+	void EventTrigger(bool IsPress);
 
-	virtual void EventTrigger_Implementation() override;
+	virtual void EventTrigger_Implementation(bool IsPress) override;
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void EventShoot();
@@ -47,11 +47,25 @@ public:
 
 	virtual void EventDrop_Implementation(ACharacter* pCharacter) override;
 
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void EventReload();
+
+	virtual void EventReload_Implementation() override;
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void EventReload_Complete();
+
+	virtual void EventReload_Complete_Implementation() override;
+
+
 public:
 	// Server : 서버에서 실행
 	// Reliable : 신뢰성
 	UFUNCTION(Server, Reliable)
 	void ReqApplyDamage(FVector vStart, FVector vEnd);
+
+	UFUNCTION(Server, Reliable)
+	void ReqReload();
 
 	UFUNCTION()
 	void OnRep_Ammo();

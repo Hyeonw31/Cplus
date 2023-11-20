@@ -1,6 +1,5 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-
 #include "GameMode/ShootingGameCodeCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -22,7 +21,7 @@ AShootingGameCodeCharacter::AShootingGameCodeCharacter()
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-		
+
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -92,8 +91,13 @@ void AShootingGameCodeCharacter::Tick(float DeltaTime)
 
 float AShootingGameCodeCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 60.0f, FColor::Green, FString::Printf(TEXT("TakeDamage DamageAmount=%f EventInstigator=%s DamageCauser=%s"),
-		DamageAmount, *EventInstigator->GetName(), *DamageCauser->GetName()));
+	GEngine->AddOnScreenDebugMessage(-1, 60.0f, FColor::Green,
+		FString::Printf(
+			TEXT("TakeDamage DamageAmount=%f EventInstigator=%s DamageCauser=%s"),
+			DamageAmount,
+			*EventInstigator->GetName(),
+			*DamageCauser->GetName()
+		));
 
 	AShootingPlayerState* pPS = Cast<AShootingPlayerState>(GetPlayerState());
 	if (IsValid(pPS) == false)
@@ -104,6 +108,38 @@ float AShootingGameCodeCharacter::TakeDamage(float DamageAmount, FDamageEvent co
 	return 0.0f;
 }
 
+void AShootingGameCodeCharacter::BeginOverlapItemMag_Implementation()
+{
+	AShootingPlayerState* pPS = Cast<AShootingPlayerState>(GetPlayerState());
+
+	if (IsValid(pPS) == false)
+		return;
+
+	pPS->AddMag();
+}
+
+void AShootingGameCodeCharacter::TestWeaponSpawn(TSubclassOf<class AWeapon> WeaponClass)
+{
+	AWeapon* pWeapon = GetWorld()->SpawnActor<AWeapon>(WeaponClass, FVector(0, 0, 0), FRotator(0, 0, 0));
+	m_pEquipWeapon = pWeapon;
+
+	pWeapon->m_pChar = this;
+	pWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("weapon"));
+
+	UpdateBindTestWeapon();
+}
+
+void AShootingGameCodeCharacter::UpdateBindTestWeapon()
+{
+	if (IsValid(GetController()) == false)
+	{
+		FTimerManager& timerManager = GetWorld()->GetTimerManager();
+		timerManager.SetTimer(th_BindTestWeapon, this, &AShootingGameCodeCharacter::UpdateBindTestWeapon, 0.01f, false);
+		return;
+	}
+
+	m_pEquipWeapon->SetOwner(GetController());
+}
 
 AActor* AShootingGameCodeCharacter::GetNearestActor()
 {
@@ -122,7 +158,7 @@ AActor* AShootingGameCodeCharacter::GetNearestActor()
 		nearestLength = distance;
 		nearestActor = target;
 	}
-	
+
 	return nearestActor;
 }
 
@@ -136,9 +172,7 @@ void AShootingGameCodeCharacter::EventEquip(AActor* pActor)
 	if (pInterface == nullptr)
 		return;
 
-	pInterface->Execute_EventPickup(m_pEquipWeapon,this);
-
-
+	pInterface->Execute_EventPickup(m_pEquipWeapon, this);
 }
 
 void AShootingGameCodeCharacter::EventUnEquip()
@@ -146,7 +180,6 @@ void AShootingGameCodeCharacter::EventUnEquip()
 	bUseControllerRotationYaw = false;
 
 	IWeaponInterface* pInterface = Cast<IWeaponInterface>(m_pEquipWeapon);
-
 	if (pInterface == nullptr)
 		return;
 
@@ -155,48 +188,38 @@ void AShootingGameCodeCharacter::EventUnEquip()
 	m_pEquipWeapon = nullptr;
 }
 
-
-void AShootingGameCodeCharacter::TestWeaponSpawn(TSubclassOf<class AWeapon> WeaponClass)
-{
-	AWeapon* pWeapon = GetWorld()->SpawnActor<AWeapon>(WeaponClass, FVector(0, 0, 0), FRotator(0, 0, 0));
-	m_pEquipWeapon = pWeapon;
-
-	pWeapon->m_pChar = this;
-	pWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("weapon"));
-
-	UpdataBindTestWeapon();
-}
-
-void AShootingGameCodeCharacter::UpdataBindTestWeapon()
-{
-	if (IsValid(GetController()) == false)
-	{
-		FTimerManager& timerManager = GetWorld()->GetTimerManager();
-		timerManager.SetTimer(th_BindTestWeapon, this, &AShootingGameCodeCharacter::UpdataBindTestWeapon, 0.01f, false); // 타이머 함수는 리턴값이 있으면 안됨(void 함수만 가능)
-		return;
-	}
-
-	m_pEquipWeapon->SetOwner(GetController());
-}
-
 void AShootingGameCodeCharacter::ReqReload_Implementation()
 {
 	// GEngine->AddOnScreenDebugMessage(-1, 60.0f, FColor::Green, TEXT("ReqReload"));
+	AShootingPlayerState* pPS = Cast<AShootingPlayerState>(GetPlayerState());
+
+	if (IsValid(pPS) == false)
+		return;
+
+	if (pPS->IsCanReload() == false)
+		return;
+
 	ResReload();
 }
 
 void AShootingGameCodeCharacter::ResReload_Implementation()
 {
 	// GEngine->AddOnScreenDebugMessage(-1, 60.0f, FColor::Green, TEXT("ResReload"));
+	IWeaponInterface* pInterface = Cast<IWeaponInterface>(m_pEquipWeapon);
+
+	if (pInterface == nullptr)
+		return;
+
+	pInterface->Execute_EventReload(m_pEquipWeapon);
 }
 
-void AShootingGameCodeCharacter::ReqShoot_Implementation()
+void AShootingGameCodeCharacter::ReqShoot_Implementation(bool isPress)
 {
- 	// GEngine->AddOnScreenDebugMessage(-1, 60.0f, FColor::Green, TEXT("ReqShoot"));
-	ResShoot();
+	// GEngine->AddOnScreenDebugMessage(-1, 60.0f, FColor::Green, TEXT("ReqShoot"));
+	ResShoot(isPress);
 }
 
-void AShootingGameCodeCharacter::ResShoot_Implementation()
+void AShootingGameCodeCharacter::ResShoot_Implementation(bool isPress)
 {
 	// GEngine->AddOnScreenDebugMessage(-1, 60.0f, FColor::Green, TEXT("ResShoot"));
 
@@ -205,9 +228,45 @@ void AShootingGameCodeCharacter::ResShoot_Implementation()
 	if (pInterface == nullptr)
 		return;
 
-	pInterface->Execute_EventTrigger(m_pEquipWeapon);
+	pInterface->Execute_EventTrigger(m_pEquipWeapon, isPress);
 }
 
+void AShootingGameCodeCharacter::ReqPressF_Implementation()
+{
+	// GEngine->AddOnScreenDebugMessage(-1, 60.0f, FColor::Green, TEXT("ReqShoot"));
+
+	AActor* pActor = GetNearestActor();
+
+	if (IsValid(pActor) == false)
+		return;
+
+	pActor->SetOwner(GetController());
+
+	ResPressF(pActor);
+}
+
+void AShootingGameCodeCharacter::ResPressF_Implementation(AActor* EquipActor)
+{
+	// GEngine->AddOnScreenDebugMessage(-1, 60.0f, FColor::Green, TEXT("ResShoot"));
+
+	if (IsValid(m_pEquipWeapon))
+	{
+		EventUnEquip();
+	}
+
+	EventEquip(EquipActor);
+}
+
+void AShootingGameCodeCharacter::ReqPressR_Implementation()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 60.0f, FColor::Green, TEXT("ReqPressR"));
+	ResPressR();
+}
+
+void AShootingGameCodeCharacter::ResPressR_Implementation()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 60.0f, FColor::Green, TEXT("ResPressR"));
+}
 
 void AShootingGameCodeCharacter::ReqTestMsg_Implementation()
 {
@@ -225,38 +284,6 @@ void AShootingGameCodeCharacter::ResTestMsgToOwner_Implementation()
 	// GEngine->AddOnScreenDebugMessage(-1, 60.0f, FColor::Green, TEXT("ResTestMsgToOwner"));
 }
 
-void AShootingGameCodeCharacter::ReqPreesF_Implementation()
-{
-	// GEngine->AddOnScreenDebugMessage(-1, 60.0f, FColor::Green, TEXT("ReqPreesF"));
-	AActor* pActor = GetNearestActor();
-
-	if (IsValid(pActor) == false)
-		return;
-
-	pActor->SetOwner(GetController());
-	ResPreesF(pActor);
-}
-
-void AShootingGameCodeCharacter::ResPreesF_Implementation(AActor* EquipActor)
-{
-	if (IsValid(m_pEquipWeapon))
-	{
-		EventUnEquip();
-	}
-
-	EventEquip(EquipActor);
-}
-
-void AShootingGameCodeCharacter::ReqDrop_Implementation()
-{
-	ResDrop();
-}
-
-void AShootingGameCodeCharacter::ResDrop_Implementation()
-{
-	EventUnEquip();
-}
-
 //////////////////////////////////////////////////////////////////////////
 // Input
 
@@ -264,7 +291,7 @@ void AShootingGameCodeCharacter::SetupPlayerInputComponent(class UInputComponent
 {
 	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent)) {
-		
+
 		// ETriggerEvent::Started	= Press
 		// ETriggerEvent::Completed = Release
 		// ETriggerEvent::Triggered = Press Tick
@@ -285,16 +312,17 @@ void AShootingGameCodeCharacter::SetupPlayerInputComponent(class UInputComponent
 		//Reload
 		EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Started, this, &AShootingGameCodeCharacter::Reload);
 
-		//Shoot
-		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Started, this, &AShootingGameCodeCharacter::Shoot);
+		//ShootPress
+		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Started, this, &AShootingGameCodeCharacter::ShootPress);
 
-		//PreesF
-		EnhancedInputComponent->BindAction(PreesFAction, ETriggerEvent::Started, this, &AShootingGameCodeCharacter::PreesF);
+		//ShootRelease
+		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Completed, this, &AShootingGameCodeCharacter::ShootRelease);
 
-		//PreesF
-		EnhancedInputComponent->BindAction(DropAction, ETriggerEvent::Started, this, &AShootingGameCodeCharacter::Drop);
+		//PressF
+		EnhancedInputComponent->BindAction(PressFAction, ETriggerEvent::Started, this, &AShootingGameCodeCharacter::PressF);
 
-		
+		//PressR
+		EnhancedInputComponent->BindAction(PressRAction, ETriggerEvent::Started, this, &AShootingGameCodeCharacter::PressR);
 	}
 
 }
@@ -312,7 +340,7 @@ void AShootingGameCodeCharacter::Move(const FInputActionValue& Value)
 
 		// get forward vector
 		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-	
+
 		// get right vector 
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
@@ -347,21 +375,24 @@ void AShootingGameCodeCharacter::Reload(const FInputActionValue& Value)
 	ReqReload();
 }
 
-void AShootingGameCodeCharacter::Shoot(const FInputActionValue& Value)
+void AShootingGameCodeCharacter::ShootPress(const FInputActionValue& Value)
 {
-	// GEngine->AddOnScreenDebugMessage(-1, 60.0f, FColor::Green, TEXT("Reload"));
-	ReqShoot();
+	// GEngine->AddOnScreenDebugMessage(-1, 60.0f, FColor::Green, TEXT("Shoot"));
+	ReqShoot(true);
 }
 
-void AShootingGameCodeCharacter::PreesF(const FInputActionValue& Value)
+void AShootingGameCodeCharacter::ShootRelease(const FInputActionValue& Value)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 60.0f, FColor::Green, TEXT("PreesF"));
-	ReqPreesF();
+	ReqShoot(false);
 }
 
-void AShootingGameCodeCharacter::Drop(const FInputActionValue& Value)
+void AShootingGameCodeCharacter::PressF(const FInputActionValue& Value)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 60.0f, FColor::Green, TEXT("Drop"));
-	ReqDrop();
+	ReqPressF();
 }
 
+void AShootingGameCodeCharacter::PressR(const FInputActionValue& Value)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 60.0f, FColor::Green, TEXT("PressR"));
+	ReqPressR();
+}

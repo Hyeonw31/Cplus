@@ -18,4 +18,8 @@ class UIteminteraction : public UInterface
 class ITEMPLUGINCODE_API IIteminteraction
 {
 	GENERATED_BODY()
+
+public:
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void GetItemMag();
 };

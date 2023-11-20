@@ -3,13 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Iteminteraction.h"
+#include "ItemInteraction.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
 #include "ShootingGameCodeCharacter.generated.h"
 
-UCLASS(config=Game)
-class AShootingGameCodeCharacter : public ACharacter, public IIteminteraction
+
+UCLASS(config = Game)
+class AShootingGameCodeCharacter : public ACharacter, public IItemInteraction
 {
 	GENERATED_BODY()
 
@@ -20,7 +21,7 @@ class AShootingGameCodeCharacter : public ACharacter, public IIteminteraction
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
-	
+
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputMappingContext* DefaultMappingContext;
@@ -49,11 +50,13 @@ class AShootingGameCodeCharacter : public ACharacter, public IIteminteraction
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* ShootAction;
 
+	/** PressF Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	class UInputAction* PreesFAction;
+	class UInputAction* PressFAction;
 
+	/** PressR Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	class UInputAction* DropAction;
+	class UInputAction* PressRAction;
 
 public:
 	AShootingGameCodeCharacter();
@@ -66,7 +69,7 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
-			
+
 	/** Called for Test input */
 	void Test(const FInputActionValue& Value);
 
@@ -74,19 +77,21 @@ protected:
 	void Reload(const FInputActionValue& Value);
 
 	/** Called for Shoot input */
-	void Shoot(const FInputActionValue& Value);
+	void ShootPress(const FInputActionValue& Value);
 
-	/** Called for PreesF input */
-	void PreesF(const FInputActionValue& Value);
+	/** Called for Shoot input */
+	void ShootRelease(const FInputActionValue& Value);
 
-	/** Called for PreesF input */
-	void Drop(const FInputActionValue& Value);
+	/** Called for PressF input */
+	void PressF(const FInputActionValue& Value);
 
+	/** Called for PressF input */
+	void PressR(const FInputActionValue& Value);
 
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	
+
 	// To add mapping context
 	virtual void BeginPlay();
 
@@ -136,33 +141,41 @@ public:
 	// Server : 서버에서 실행
 	// Reliable : 신뢰성
 	UFUNCTION(Server, Reliable)
-	void ReqShoot();
+	void ReqShoot(bool isPress);
 
 	// NetMulticast : 모두에서 실행
 	UFUNCTION(NetMulticast, Reliable)
-	void ResShoot();
-	
+	void ResShoot(bool isPress);
+
+	// Server : 서버에서 실행
+	// Reliable : 신뢰성
 	UFUNCTION(Server, Reliable)
-	void ReqPreesF();
+	void ReqPressF();
 
 	// NetMulticast : 모두에서 실행
 	UFUNCTION(NetMulticast, Reliable)
-	void ResPreesF(AActor* EquipActor);
+	void ResPressF(AActor* EquipActor);
 
+	// Server : 서버에서 실행
+	// Reliable : 신뢰성
 	UFUNCTION(Server, Reliable)
-	void ReqDrop();
+	void ReqPressR();
 
 	// NetMulticast : 모두에서 실행
 	UFUNCTION(NetMulticast, Reliable)
-	void ResDrop();
+	void ResPressR();
 
+public:
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void BeginOverlapItemMag();
 
+	virtual void BeginOverlapItemMag_Implementation(bool IsPress) override;
 
 public:
 	UFUNCTION(BlueprintCallable)
 	void TestWeaponSpawn(TSubclassOf<class AWeapon> WeaponClass);
 
-	void UpdataBindTestWeapon();
+	void UpdateBindTestWeapon();
 
 	AActor* GetNearestActor();
 
@@ -182,4 +195,3 @@ public:
 
 	FTimerHandle th_BindTestWeapon;
 };
-

@@ -4,6 +4,7 @@
 #include "ItemMag.h"
 #include "Iteminteraction.h"
 
+
 // Sets default values
 AItemMag::AItemMag()
 {
@@ -43,6 +44,12 @@ void AItemMag::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* 
 	if (pInterface == nullptr)
 		return;
 
+	pInterface->Execute_GetItemMag(OtherActor);
+
 	Destroy();
 }
+
+
+
+
 

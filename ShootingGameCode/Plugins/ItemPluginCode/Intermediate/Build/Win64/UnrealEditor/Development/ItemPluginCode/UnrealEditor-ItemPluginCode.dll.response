@@ -35,6 +35,10 @@
 /FUNCTIONPADMIN:6
 "D:\Works\Cplus\ShootingGameCode\Intermediate\Build\Win64\ShootingGameCodeEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.h.obj"
 "D:\Works\Cplus\ShootingGameCode\Plugins\ItemPluginCode\Intermediate\Build\Win64\UnrealEditor\Development\ItemPluginCode\Module.ItemPluginCode.cpp.obj"
+"D:\Works\Cplus\ShootingGameCode\Plugins\ItemPluginCode\Intermediate\Build\Win64\UnrealEditor\Development\ItemPluginCode\Iteminteraction.cpp.obj"
+"D:\Works\Cplus\ShootingGameCode\Plugins\ItemPluginCode\Intermediate\Build\Win64\UnrealEditor\Development\ItemPluginCode\ItemMag.cpp.obj"
+"D:\Works\Cplus\ShootingGameCode\Plugins\ItemPluginCode\Intermediate\Build\Win64\UnrealEditor\Development\ItemPluginCode\Iteminteraction.gen.cpp.obj"
+"D:\Works\Cplus\ShootingGameCode\Plugins\ItemPluginCode\Intermediate\Build\Win64\UnrealEditor\Development\ItemPluginCode\ItemPluginCode.init.gen.cpp.obj"
 "D:\Works\Cplus\ShootingGameCode\Plugins\ItemPluginCode\Intermediate\Build\Win64\UnrealEditor\Development\ItemPluginCode\Default.rc2.res"
 "..\Intermediate\Build\Win64\UnrealEditor\Development\CoreUObject\UnrealEditor-CoreUObject.lib"
 "..\Intermediate\Build\Win64\UnrealEditor\Development\Engine\UnrealEditor-Engine.lib"

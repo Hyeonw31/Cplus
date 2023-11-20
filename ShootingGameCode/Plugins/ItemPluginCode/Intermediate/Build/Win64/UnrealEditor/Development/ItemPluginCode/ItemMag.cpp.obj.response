@@ -282,7 +282,10 @@ D:\Works\Cplus\ShootingGameCode\Plugins\ItemPluginCode\Source\ItemPluginCode\Pri
 /external:I "C:\Program Files (x86)\Windows Kits\10\include\10.0.22621.0\shared"
 /external:I "C:\Program Files (x86)\Windows Kits\10\include\10.0.22621.0\um"
 /external:I "C:\Program Files (x86)\Windows Kits\10\include\10.0.22621.0\winrt"
-/FI"D:\Works\Cplus\ShootingGameCode\Plugins\ItemPluginCode\Intermediate\Build\Win64\UnrealEditor\Development\ItemPluginCode\Definitions.h"
+/FI"D:\Works\Cplus\ShootingGameCode\Intermediate\Build\Win64\ShootingGameCodeEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.h"
+/FI"D:\Works\Cplus\ShootingGameCode\Plugins\ItemPluginCode\Intermediate\Build\Win64\UnrealEditor\Development\ItemPluginCode\Definitions.ItemPluginCode.h"
+/Yu"D:\Works\Cplus\ShootingGameCode\Intermediate\Build\Win64\ShootingGameCodeEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.h"
+/Fp"D:\Works\Cplus\ShootingGameCode\Intermediate\Build\Win64\ShootingGameCodeEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.h.pch"
 /Fo"D:\Works\Cplus\ShootingGameCode\Plugins\ItemPluginCode\Intermediate\Build\Win64\UnrealEditor\Development\ItemPluginCode\ItemMag.cpp.obj"
 /sourceDependencies D:\Works\Cplus\ShootingGameCode\Plugins\ItemPluginCode\Intermediate\Build\Win64\UnrealEditor\Development\ItemPluginCode\ItemMag.cpp.dep.json
 /Zc:inline

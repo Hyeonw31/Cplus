@@ -7,6 +7,7 @@
 #include "Net/UnrealNetwork.h"// Replicated 처리에서 DOREPLIFETIME 기능을 가지고 있는 라이브러리
 #include "GameFramework/SpringArmComponent.h"
 #include "GameMode/ShootingHUD.h"
+#include "GameMode/ShootingPlayerState.h"
 
 // Sets default values
 AWeapon::AWeapon() :m_Ammo(30)
@@ -46,7 +47,7 @@ void AWeapon::Tick(float DeltaTime)
 
 }
 
-void AWeapon::EventTrigger_Implementation()
+void AWeapon::EventTrigger_Implementation(bool IsPress)
 {
 	if (IsValid(ShootMontage) == false)
 		return;
@@ -97,6 +98,30 @@ void AWeapon::EventDrop_Implementation(ACharacter* pCharacter)
 	SetOwner(nullptr);
 }
 
+void AWeapon::EventReload_Implementation()
+{
+	if (IsValid(ReloadMontage) == false)
+		return;
+
+	m_pChar->PlayAnimMontage(ReloadMontage);
+}
+
+void AWeapon::EventReload_Complete_Implementation()
+{
+	if (IsValid(m_pChar) == false)
+		return;
+
+	APlayerController* pPlayer0 = GetWorld()->GetFirstPlayerController();
+	if (IsValid(pPlayer0) == false)
+		return;
+
+	AController* pOwner = m_pChar->GetController();
+	if (pPlayer0 != pOwner)
+		return;
+
+	ReqReload();
+}
+
 
 void AWeapon::ReqApplyDamage_Implementation(FVector vStart, FVector vEnd)
 {
@@ -127,6 +152,16 @@ void AWeapon::ReqApplyDamage_Implementation(FVector vStart, FVector vEnd)
 
 	UGameplayStatics::ApplyDamage(pHitChar, 10.0f, m_pChar->GetController(), this, UDamageType::StaticClass());
 
+}
+
+void AWeapon::ReqReload_Implementation()
+{
+	AShootingPlayerState* pPS = Cast<AShootingPlayerState>(m_pChar->GetPlayerState());
+
+	if (IsValid(pPS) == false)
+		return;
+
+	pPS->UseMag();
 }
 
 void AWeapon::OnRep_Ammo()

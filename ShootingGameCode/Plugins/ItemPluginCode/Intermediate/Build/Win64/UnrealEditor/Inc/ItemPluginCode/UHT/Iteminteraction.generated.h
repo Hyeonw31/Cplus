@@ -15,9 +15,20 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #define ITEMPLUGINCODE_Iteminteraction_generated_h
 
 #define FID_ShootingGameCode_Plugins_ItemPluginCode_Source_ItemPluginCode_Public_Iteminteraction_h_15_SPARSE_DATA
-#define FID_ShootingGameCode_Plugins_ItemPluginCode_Source_ItemPluginCode_Public_Iteminteraction_h_15_RPC_WRAPPERS
-#define FID_ShootingGameCode_Plugins_ItemPluginCode_Source_ItemPluginCode_Public_Iteminteraction_h_15_RPC_WRAPPERS_NO_PURE_DECLS
+#define FID_ShootingGameCode_Plugins_ItemPluginCode_Source_ItemPluginCode_Public_Iteminteraction_h_15_RPC_WRAPPERS \
+	virtual void GetItemMag_Implementation() {}; \
+ \
+	DECLARE_FUNCTION(execGetItemMag);
+
+
+#define FID_ShootingGameCode_Plugins_ItemPluginCode_Source_ItemPluginCode_Public_Iteminteraction_h_15_RPC_WRAPPERS_NO_PURE_DECLS \
+	virtual void GetItemMag_Implementation() {}; \
+ \
+	DECLARE_FUNCTION(execGetItemMag);
+
+
 #define FID_ShootingGameCode_Plugins_ItemPluginCode_Source_ItemPluginCode_Public_Iteminteraction_h_15_ACCESSORS
+#define FID_ShootingGameCode_Plugins_ItemPluginCode_Source_ItemPluginCode_Public_Iteminteraction_h_15_CALLBACK_WRAPPERS
 #define FID_ShootingGameCode_Plugins_ItemPluginCode_Source_ItemPluginCode_Public_Iteminteraction_h_15_STANDARD_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API UIteminteraction(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
@@ -76,6 +87,7 @@ protected: \
 public: \
 	typedef UIteminteraction UClassType; \
 	typedef IIteminteraction ThisClass; \
+	static void Execute_GetItemMag(UObject* O); \
 	virtual UObject* _getUObject() const { return nullptr; }
 
 
@@ -85,6 +97,7 @@ protected: \
 public: \
 	typedef UIteminteraction UClassType; \
 	typedef IIteminteraction ThisClass; \
+	static void Execute_GetItemMag(UObject* O); \
 	virtual UObject* _getUObject() const { return nullptr; }
 
 
@@ -95,6 +108,7 @@ public: \
 	FID_ShootingGameCode_Plugins_ItemPluginCode_Source_ItemPluginCode_Public_Iteminteraction_h_15_SPARSE_DATA \
 	FID_ShootingGameCode_Plugins_ItemPluginCode_Source_ItemPluginCode_Public_Iteminteraction_h_15_RPC_WRAPPERS \
 	FID_ShootingGameCode_Plugins_ItemPluginCode_Source_ItemPluginCode_Public_Iteminteraction_h_15_ACCESSORS \
+	FID_ShootingGameCode_Plugins_ItemPluginCode_Source_ItemPluginCode_Public_Iteminteraction_h_15_CALLBACK_WRAPPERS \
 	FID_ShootingGameCode_Plugins_ItemPluginCode_Source_ItemPluginCode_Public_Iteminteraction_h_15_INCLASS_IINTERFACE \
 public: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
@@ -106,6 +120,7 @@ public: \
 	FID_ShootingGameCode_Plugins_ItemPluginCode_Source_ItemPluginCode_Public_Iteminteraction_h_15_SPARSE_DATA \
 	FID_ShootingGameCode_Plugins_ItemPluginCode_Source_ItemPluginCode_Public_Iteminteraction_h_15_RPC_WRAPPERS_NO_PURE_DECLS \
 	FID_ShootingGameCode_Plugins_ItemPluginCode_Source_ItemPluginCode_Public_Iteminteraction_h_15_ACCESSORS \
+	FID_ShootingGameCode_Plugins_ItemPluginCode_Source_ItemPluginCode_Public_Iteminteraction_h_15_CALLBACK_WRAPPERS \
 	FID_ShootingGameCode_Plugins_ItemPluginCode_Source_ItemPluginCode_Public_Iteminteraction_h_15_INCLASS_IINTERFACE_NO_PURE_DECLS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
